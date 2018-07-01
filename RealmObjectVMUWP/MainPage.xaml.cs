@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RealmObjectVM;
+using Realms;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +24,43 @@ namespace RealmObjectVMUWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private Realm realm;
+
+        public MainViewModel ViewModel { get; set; }
+
         public MainPage()
         {
             this.InitializeComponent();
+
+            try
+            {
+                realm = Realm.GetInstance(new RealmConfiguration { ShouldDeleteIfMigrationNeeded = true });
+                ViewModel = realm.All<MainViewModel>().FirstOrDefault();
+                if (ViewModel == default(MainViewModel))
+                {
+                    realm.Write(() =>
+                    {
+                        ViewModel = new MainViewModel();
+                        realm.Add(ViewModel);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
+        }
+
+        ~MainPage()
+        {
+            try
+            {
+                this.realm.Dispose();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+            }
         }
     }
 }

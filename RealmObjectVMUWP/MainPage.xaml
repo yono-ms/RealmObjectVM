@@ -9,6 +9,13 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <StackPanel>
+            <TextBlock Text="{x:Bind ViewModel.Title}"/>
+            <TextBlock Text="{x:Bind ViewModel.Description}"/>
+            <TextBox Text="{x:Bind ViewModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="{x:Bind ViewModel.NameHeader}"/>
+            <TextBlock Text="{x:Bind ViewModel.NameError, Mode=OneWay}"/>
+            <TextBlock Text="{x:Bind ViewModel.SystemError, Mode=OneWay}"/>
+            <Button Content="{x:Bind ViewModel.LabelCommit, Mode=OneWay}" Click="{x:Bind ViewModel.CommandCommit}"/>
+        </StackPanel>
     </Grid>
 </Page>
